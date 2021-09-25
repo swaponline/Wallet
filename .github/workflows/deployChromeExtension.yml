@@ -48,13 +48,3 @@ jobs:
         file-name: 'zipped-chrome-extension-eth.zip'
         app-id: 'oldojieloelkkfeacfinhcngmbkepnlm'
         publish: false
-    - name: publish rinkeby extension to chrome web store
-      if: contains(steps.changed-files.outputs.modified_files, 'manifest_eth.json')
-      uses: Passiverecords/chrome-extension-upload-action@1.4.1
-      with:
-        refresh-token: ${{ secrets.CHROMEUPDATETOKEN }}
-        client-id: ${{ secrets.CLIENTID }}
-        client-secret: ${{ secrets.CLIENTSECRET }}
-        file-name: 'zipped-chrome-extension-eth-testnet.zip'
-        app-id: 'lihimbnmcnbecbnfbbkccoblfjaomiil'
-        publish: false
