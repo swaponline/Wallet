@@ -43,6 +43,10 @@ const webpackConfig = {
     rules,
   },
 
+  experiments: {
+    asyncWebAssembly: true
+  },
+
   resolve: {
     alias: {
       'shared': config.paths.front('shared'),

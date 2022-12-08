@@ -221,7 +221,7 @@
     "babel-runtime": "^6.26.0",
     "bigi": "^1.4.2",
     "bignumber.js": "^9.0.1",
-    "bip32": "^2.0.6",
+    "bip32": "^3.0.0",
     "bip39": "^3.0.2",
     "bitcoinjs-lib": "^5.1.6",
     "bitcoinjs-message": "^2.1.0",
@@ -282,6 +282,7 @@
     "shx": "^0.3.3",
     "superagent": "^6.1.0",
     "swiper": "^7.0.3",
+    "tiny-secp256k1": "^2.1.0",
     "typeforce": "^1.18.0",
     "valuelink": "^1.6.2",
     "web3": "^1.5.1"

@@ -2,7 +2,6 @@ import BigInteger from 'bigi'
 
 import { BigNumber } from 'bignumber.js'
 import * as bitcoin from 'bitcoinjs-lib'
-import * as bip32 from 'bip32'
 import * as bip39 from 'bip39'
 
 import bitcoinMessage from 'bitcoinjs-message'

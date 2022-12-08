@@ -1,5 +1,5 @@
 import SwapApp, { ServiceInterface, constants } from 'swap.app'
-
+import instances from './instances'
 
 let _privateKeys
 let _mnemonic
@@ -8,9 +8,10 @@ const getPublicDataMethods = {}
 class SwapAuth extends ServiceInterface {
 
   _serviceName: string
+
   accounts: any
 
-  //@ts-ignore
+  // @ts-ignore
   static get name() {
     return 'auth'
   }
@@ -26,7 +27,7 @@ class SwapAuth extends ServiceInterface {
   }
 
   initService() {
-    const app = this.app
+    const { app } = this
 
     SwapApp.required(app)
 
@@ -39,8 +40,7 @@ class SwapAuth extends ServiceInterface {
       }
 
       try {
-        let instance = require(`./${name}`)
-        instance = instance.default || instance
+        const instance = instances[name]
         const account = (_mnemonic)
           ? instance.loginMnemonic(_mnemonic, 0, false, app)
           : instance.login(_privateKeys[name], app)
@@ -66,6 +66,5 @@ class SwapAuth extends ServiceInterface {
     return data
   }
 }
-
 
 export default SwapAuth
