@@ -224,7 +224,7 @@
     "bignumber.js": "^9.0.1",
     "bip32": "^2.0.6",
     "bip39": "^3.0.2",
-    "bitcoinjs-lib": "^5.1.6",
+    "bitcoinjs-lib": "^6.1.0",
     "bitcoinjs-message": "^2.1.0",
     "bitcore-lib": "^8.25.10",
     "classnames": "^2.2.5",
