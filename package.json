@@ -159,7 +159,7 @@
     "hyperdiff": "^2.0.8",
     "jest": "^27.0.0",
     "kraken-api": "^1.0.1",
-    "libp2p-kad-dht": "^0.23.1",
+    "libp2p-kad-dht": "^0.28.6",
     "libp2p-webrtc-star": "^0.23.0",
     "mini-css-extract-plugin": "^2.0.0",
     "node-localstorage": "^2.1.6",
