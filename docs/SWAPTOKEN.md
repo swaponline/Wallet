@@ -1,5 +1,7 @@
 # `SWAP` is ERC20 token of our project
 
+TL;DR: At this time (early 2024) Circulation supply ~10% on @vladiuz1 wallet, ~85% @noxonsu wallet, 5% 2500 other adresses
+
 ## Available on exchanges
 - 🥥 [dex.onout.org](https://dex.onout.org/) BSC network - recommened (this DEX was deployed with OnOut dex tool https://onout.org/dex )
 - 🦄 [Uniswap](https://app.uniswap.org/#/swap?outputCurrency=0x14a52cf6b4f68431bd5d9524e4fcd6f41ce4ade9) - low liquidity
