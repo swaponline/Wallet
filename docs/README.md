@@ -3,7 +3,7 @@
 [![About SWAP token](https://img.shields.io/badge/ERC20-SWAP-green)](https://github.com/swaponline/MultiCurrencyWallet/blob/master/docs/SWAPTOKEN.md)
 ![Custom badge](https://img.shields.io/endpoint?label=SWAP%20token%20price&url=https%3A%2F%2Fwallet.wpmix.net%2FtokenPrice%2F%3Fnetwork%3Dbsc%26address%3D0x92648e4537cdfa1ee743a244465a31aa034b1ce8%26round%3D2%26color%3Dgreen)
     
-## MultiCurrencyWallet
+## MultiCurrencyWallet 
             
 - 👛 Crypto wallet: BTC, ETН (ERC20), BSC (BEP20), Matic (+tokens), USDT, {your_token}...
 - 💵 Fiat gateway: USD, EUR, RUB, UAH... via itez.com ; 
