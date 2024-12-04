@@ -45,7 +45,7 @@ export default {
   multisig: 'https://multisig.onout.org',
   txinfo: 'https://txinfo.onout.org',
   noxon: 'https://noxon.wpmix.net',
-  phiscan: 'https://phiscan.com/api',
+  phiscan: 'https://api.phiscan.com/api',
   fkwscan: 'https://explorer.fokawa.com/api',
   phpxscan: 'https://explorer.phpx.network/api',
   WalletConnectProjectId: 'a23677c4af3139b4eccb52981f76ad94',
