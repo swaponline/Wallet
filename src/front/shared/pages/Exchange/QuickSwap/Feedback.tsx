@@ -21,6 +21,7 @@ function Feedback(props) {
     receivedCurrency,
     error,
     sourceAction,
+    isWrapUnwrap,
   } = props
 
   return (
@@ -79,7 +80,7 @@ function Feedback(props) {
             defaultMessage="Please approve both tokens first"
           />
         </p>
-      ) : needApproveA ? (
+      ) : needApproveA && !isWrapUnwrap ? (
         <p styleName="warningNotice">
           <FormattedMessage
             id="approveTokenFirst"

@@ -18,6 +18,9 @@ function Header(props) {
     openAggregatorSection,
     openSourceSection,
     openSettingsSection,
+    hasUniSwapV3,
+    useUniSwapV3,
+    setUseUniSwapV3,
   } = props
 
   let sourceTitle = LIQUIDITY_SOURCE_DATA[network.networkVersion]?.name || (
@@ -39,13 +42,40 @@ function Header(props) {
       )}
 
       {!onlyAggregator && (
-        <button
-          id="sourceSectionDescription"
-          styleName={`tab ${activeSection === Sections.Source ? 'active' : ''}`}
-          onClick={openSourceSection}
-        >
-          {sourceTitle}
-        </button>
+        <>
+          {hasUniSwapV3 ? (
+            <>
+              <button
+                id="sourceSectionDescription"
+                styleName={`tab ${(activeSection === Sections.Source && !useUniSwapV3) ? 'active' : ''}`}
+                onClick={() => {
+                  openSourceSection()
+                  setUseUniSwapV3(false)
+                }}
+              >
+                {sourceTitle}
+              </button>
+              <button
+                id="sourceSectionDescription"
+                styleName={`tab ${(activeSection === Sections.Source && useUniSwapV3) ? 'active' : ''}`}
+                onClick={() => {
+                  openSourceSection()
+                  setUseUniSwapV3(true)
+                }}
+              >
+                {`UniSwap V3`}
+              </button>
+            </>
+          ) : (
+            <button
+              id="sourceSectionDescription"
+              styleName={`tab ${activeSection === Sections.Source ? 'active' : ''}`}
+              onClick={openSourceSection}
+            >
+              {sourceTitle}
+            </button>
+          )}
+        </>
       )}
 
       <button

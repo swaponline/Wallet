@@ -1,0 +1,163 @@
+.positionInfo {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.posIdAndFee {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--color-inactive-border);
+  border: 1px solid var(--color-inactive-border);
+  border-radius: 6px;
+  >SPAN {
+    font-weight: bold;
+    >EM {
+      color: var(--color-brand);
+      font-weight: bold;
+      font-style: normal;
+    }
+  }
+  >EM {
+    font-weight: bold;
+    font-style: normal;
+  }
+}
+
+.switchViewSide {
+  display: flex;
+  justify-content: space-between;
+  
+  >SPAN {
+    color: var(--color-indicating);
+    display: block;
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    padding-left: 0px;
+    > EM {
+      padding-left: 10px;
+      display: inline-block;
+      color: var(--color-success);
+      font-style: normal;
+      font-weight: bold;
+      
+      > I {
+        padding-right: 4px;
+      }
+      &.outOfRange {
+        color: var(--color-bad);
+      }
+      &.closed {
+        color: var(--color-indicating);
+      }
+    }
+  }
+  >DIV {
+    margin-bottom: 0.4rem;
+    display: flex;
+    font-size: 0.9rem;
+    
+    >A {
+      cursor: pointer;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--color-border);
+    }
+    >A:first-child {
+      border-radius: 4px 0 0 4px;
+      border-right: 0;
+    }
+    >A:last-child {
+      border-radius: 0px 4px 4px 0px;
+    }
+    >A.active {
+      cursor: default;
+      background-color: var(--color-inactive-border);
+      border-color: var(--color-inactive-border);
+    }
+  }
+}
+
+.priceRangeHolder {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  >DIV {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--color-inactive-border);
+    border: 1px solid var(--color-inactive-border);
+    border-radius: 6px;
+    margin-top: 0;
+    &.minPrice {
+      margin-left: 0;
+      margin-right: 0.25rem;
+      width: calc(50% - 0.25rem);
+    }
+    &.maxPrice {
+      margin-right: 0;
+      margin-left: 0.25rem;
+      width: calc(50% - 0.25rem);
+    }
+    &.curPrice {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+    }
+    >STRONG,
+    >SPAN,
+    >EM {
+      display: block;
+      text-align: center;
+    }
+    >STRONG,
+    >EM {
+      font-style: normal;
+      font-weight: bold;
+      color: var(--color-indicating);
+    }
+    >SPAN {
+      font-weight: bold;
+      font-size: 24pt;
+    }
+  }
+}
+
+.liquidity {
+  display: block;
+  padding: 0.5rem;
+  background-color: var(--color-inactive-border);
+  border: 1px solid var(--color-inactive-border);
+  border-radius: 6px;
+  
+  >STRONG {
+    font-style: normal;
+    font-weight: bold;
+    color: var(--color-indicating);
+    display: block;
+  }
+  >DIV {
+    display: flex;
+    
+    >SPAN,
+    >STRONG {
+      display: block;
+      width: calc(50% - 0.5rem);
+      font-style: normal;
+      font-weight: bold;
+      color: var(--color-indicating);
+      font-size: 16pt;
+    }
+    >SPAN {
+      margin-right: 0.5rem;
+      text-align: right;
+      color: var(--color);
+    }
+    >STRONG {
+      margin-left: 0.5rem;
+      text-align: left;
+    }
+    
+  }
+}

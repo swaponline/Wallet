@@ -50,6 +50,8 @@ import Settings from './Settings'
 import Feedback from './Feedback'
 import Footer from './Footer'
 
+import UniV3Pools from './UniV3Pools'
+
 const QuickswapModes = {
   aggregator: 'aggregator',
   source: 'source',
@@ -63,6 +65,7 @@ const CURRENCY_PLUG = {
   name: '-',
   notExist: true,
 }
+import config from 'helpers/externalConfig'
 
 class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
   constructor(props) {
@@ -194,9 +197,29 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
       blockReason: undefined,
       serviceFee: false,
       zeroxApiKey: window.zeroxApiKey || '',
+
+      useUniSwapV3: false,
+      uniV3PoolsByFee: [],
+      uniV3ActivePoolFee: 0,
+
+      // Wrap/Unwrap native coin
+      isWrapUnwrap: false,
+      isWrappedTokenA: false,
+      isWrappedTokenB: false,
+      isNativeTokenA: false,
+      isNativeTokenB: false,
     }
   }
 
+  setUseUniSwapV3(useV3) {
+    this.setState(() => ({
+      useUniSwapV3: useV3,
+    }), () => {
+      console.log('>>>> switch uniswap - update pair address')
+      this.updateCurrentPairAddress()
+    })
+  }
+  
   componentDidMount() {
     this.updateNetwork()
     this.updateServiceFeeData()
@@ -688,33 +711,102 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
     this.setState(() => ({ ...data }))
   }
 
+  getHasUniSwapV3 = () => {
+    const { network } = this.state
+    return config && config.UNISWAP_V3_CONTRACTS && config.UNISWAP_V3_CONTRACTS[network.networkVersion]
+  }
+
+  isWrappedToken = (tokenAddress) => {
+    const { network: { networkVersion: chainId } } = this.state
+    return actions.uniswap.isWrappedToken({
+      chainId,
+      tokenAddress,
+    })
+  }
+  isNativeToken = (tokenAddress) => (tokenAddress == EVM_COIN_ADDRESS) ? true : false
+
   updateCurrentPairAddress = async () => {
-    const { network, baseChainWallet, fromWallet, toWallet } = this.state
+    const { network, baseChainWallet, fromWallet, toWallet, useUniSwapV3 } = this.state
     const tokenA = fromWallet?.contractAddress || EVM_COIN_ADDRESS
     const tokenB = toWallet?.contractAddress || EVM_COIN_ADDRESS
 
-    let pairAddress = cacheStorageGet(
+    const isWrappedTokenA = this.isWrappedToken(tokenA)
+    const isWrappedTokenB = this.isWrappedToken(tokenB)
+    const isNativeTokenA = this.isNativeToken(tokenA)
+    const isNativeTokenB = this.isNativeToken(tokenB)
+
+    console.log('>>>> UPDATE CURRENT PAIR ADDRESS', tokenA, tokenB, isWrappedTokenA, isWrappedTokenB, isNativeTokenA, isNativeTokenB)
+
+    if ((isWrappedTokenA && isNativeTokenB) || (isWrappedTokenB && isNativeTokenA)) {
+      this.setState({
+        isWrapUnwrap: true,
+        isWrappedTokenA,
+        isWrappedTokenB,
+        isNativeTokenA,
+        isNativeTokenB,
+        uniV3PoolsByFee: [],
+        uniV3ActivePoolFee: 0,
+        currentLiquidityPair: null,
+        blockReason: undefined
+      })
+      return
+    } else {
+      this.setState({
+        isWrapUnwrap: false,
+        isWrappedTokenA,
+        isWrappedTokenB,
+        isNativeTokenA,
+        isNativeTokenB,
+      })
+    }
+    const hasUniSwapV3 = this.getHasUniSwapV3()
+    
+    let pairAddress = (useUniSwapV3 && hasUniSwapV3) ? false : cacheStorageGet(
       'quickswapLiquidityPair',
-      `${externalConfig.entry}_${tokenA}_${tokenB}`,
+      `${externalConfig.entry}_${tokenA}_${tokenB}_${(useUniSwapV3 && hasUniSwapV3) ? 'V3' : 'V2'}`,
     )
 
     if (!pairAddress) {
-      pairAddress = await actions.uniswap.getPairAddress({
+      pairAddress = await actions.uniswap[(useUniSwapV3 && hasUniSwapV3) ? 'getPoolAddressV3All' : 'getPairAddress']({
         baseCurrency: baseChainWallet.currency,
         chainId: network.networkVersion,
         factoryAddress: LIQUIDITY_SOURCE_DATA[network.networkVersion]?.factory,
         tokenA,
         tokenB,
       })
-
+      let newFee = 0
+      if (useUniSwapV3 && hasUniSwapV3) {
+        if (pairAddress.length) {
+          // check exists pool for active fee
+          const { uniV3ActivePoolFee } = this.state
+          const existsCurrenctFeePool = pairAddress.filter(({ fee }) => {
+            return (fee == uniV3ActivePoolFee)
+          })
+          const _pairAddress = pairAddress
+          pairAddress = (existsCurrenctFeePool.length > 0) ? existsCurrenctFeePool[0].address : pairAddress[0].address
+          this.setState(() => ({
+            uniV3PoolsByFee: _pairAddress,
+            uniV3ActivePoolFee: (existsCurrenctFeePool.length > 0) ? existsCurrenctFeePool[0].fee: _pairAddress[0].fee
+          }))
+          newFee = (existsCurrenctFeePool.length > 0) ? existsCurrenctFeePool[0].fee : _pairAddress[0].fee
+        } else {
+          pairAddress = ZERO_ADDRESS
+          this.setState(() => ({
+            uniV3PoolsByFee: [],
+            uniV3ActivePoolFee: 0,
+          }))
+        }
+      }
       const SECONDS = 15
 
       cacheStorageSet(
         'quickswapLiquidityPair',
-        `${externalConfig.entry}_${tokenA}_${tokenB}`,
+        `${externalConfig.entry}_${tokenA}_${tokenB}_${(useUniSwapV3 && hasUniSwapV3) ? 'V3' : 'V2'}`,
         pairAddress,
         SECONDS,
       )
+    } else {
+      console.log('>>>> USE CACHE')
     }
 
     const noLiquidityPair = pairAddress === ZERO_ADDRESS
@@ -726,8 +818,14 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
   }
 
   processingSourceActions = async () => {
-    const { sourceAction, currentLiquidityPair, spendedAmount } = this.state
+    const { sourceAction, currentLiquidityPair, spendedAmount, isWrapUnwrap } = this.state
 
+    if (isWrapUnwrap) {
+      this.setState({
+        receivedAmount: spendedAmount,
+      })
+      return
+    }
     if (!currentLiquidityPair || !spendedAmount) return
 
     switch (sourceAction) {
@@ -740,15 +838,25 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
   }
 
   fetchAmountOut = async () => {
-    const { network, baseChainWallet, spendedAmount, fromWallet, toWallet } = this.state
+    const {
+      network,
+      baseChainWallet,
+      spendedAmount,
+      fromWallet,
+      toWallet,
+      useUniSwapV3,
+      uniV3ActivePoolFee,
+    } = this.state
 
     const tokenA = fromWallet.contractAddress ?? EVM_COIN_ADDRESS
     const tokenB = toWallet.contractAddress ?? EVM_COIN_ADDRESS
 
     this.setPending(true)
 
+    const hasUniSwapV3 = this.getHasUniSwapV3()
+    
     try {
-      const amountOut = await actions.uniswap.getAmountOut({
+      const amountOut = await actions.uniswap[(hasUniSwapV3 && useUniSwapV3) ? 'getAmountOutV3' : 'getAmountOut']({
         routerAddress: LIQUIDITY_SOURCE_DATA[network.networkVersion]?.router,
         baseCurrency: baseChainWallet.currency,
         chainId: network.networkVersion,
@@ -757,6 +865,7 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
         amountIn: spendedAmount,
         tokenB,
         tokenBDecimals: toWallet.decimals ?? COIN_DECIMALS,
+        fee: uniV3ActivePoolFee,
       })
 
       this.setState(() => ({
@@ -819,8 +928,20 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
     this.resetReceivedAmount()
   }
 
+  switchUniV3SourcePool = (fee, poolAddress) => {
+    this.setState(() => ({
+      uniV3ActivePoolFee: fee,
+      currentLiquidityPair: poolAddress,
+    }), () => {
+      console.log('>>> UPDATE DATA ON FEE CHANGE')
+      this.onInputDataChange()
+    })
+    
+  }
+  
   checkApprove = async (direction) => {
-    const { network, isSourceMode, spendedAmount, receivedAmount, fromWallet, toWallet } = this.state
+    const { network, isSourceMode, spendedAmount, receivedAmount, fromWallet, toWallet, useUniSwapV3 } = this.state
+    const hasUniSwapV3 = this.getHasUniSwapV3()
 
     let amount = spendedAmount
     let wallet = fromWallet
@@ -830,9 +951,13 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
       wallet = toWallet
     }
 
-    const spender: `0x${number}` = isSourceMode
+    let spender: `0x${number}` = isSourceMode
       ? LIQUIDITY_SOURCE_DATA[network.networkVersion]?.router
       : externalConfig.swapContract[SWAP_API[network.networkVersion].spender]
+
+    if (hasUniSwapV3 && useUniSwapV3) {
+      spender = config?.UNISWAP_V3_CONTRACTS[network.networkVersion]?.router
+    }
 
     if (!wallet.isToken) {
       this.setNeedApprove(direction, false)
@@ -1017,6 +1142,7 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
   openSourceSection = () => {
     this.setState(() => ({
       activeSection: Sections.Source,
+      sourceAction: Actions.Swap,
       isSourceMode: true,
       receivedAmount: '',
       swapData: undefined,
@@ -1099,7 +1225,7 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
   }
 
   render() {
-    const { history } = this.props
+    const { history, intl } = this.props
     const {
       baseChainWallet,
       activeSection,
@@ -1123,8 +1249,18 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
       blockReason,
       slippage,
       serviceFee,
+
+      currentLiquidityPair,
+      useUniSwapV3,
+      userDeadline,
+      // Wrap/Unwrap
+      isWrapUnwrap,
+      isWrappedTokenA,
+      isWrappedTokenB,
     } = this.state
 
+    const hasUniSwapV3 = this.getHasUniSwapV3()
+    
     const linked = Link.all(
       this,
       'slippage',
@@ -1170,6 +1306,9 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
             openAggregatorSection={this.openAggregatorSection}
             openSourceSection={this.openSourceSection}
             openSettingsSection={this.openSettingsSection}
+            hasUniSwapV3={hasUniSwapV3}
+            useUniSwapV3={useUniSwapV3}
+            setUseUniSwapV3={this.setUseUniSwapV3.bind(this)}
           />
           {activeSection === Sections.Settings ? (
             <Settings
@@ -1181,27 +1320,49 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
             />
           ) : (
             <>
-              <div styleName={`${wrongNetwork ? 'disabled' : ''}`}>
-                <InputForm
-                  parentState={this.state}
-                  stateReference={linked}
-                  selectCurrency={this.selectCurrency}
-                  flipCurrency={this.flipCurrency}
-                  openExternalExchange={this.openExternalExchange}
-                  onInputDataChange={this.onInputDataChange}
-                  setSpendedAmount={this.setSpendedAmount}
-                  updateWallets={this.updateWallets}
-                  insufficientBalanceA={insufficientBalanceA}
-                  insufficientBalanceB={insufficientBalanceB}
-                  resetReceivedAmount={this.resetReceivedAmount}
-                  setReceivedAmount={this.setReceivedAmount}
-                />
-              </div>
-
               {activeSection === Sections.Source && (
-                <SourceActions sourceAction={sourceAction} setAction={this.setAction} />
+                <SourceActions
+                  sourceAction={sourceAction}
+                  setAction={this.setAction}
+                  useUniSwapV3={useUniSwapV3}
+                />
               )}
-
+              {(sourceAction == Actions.UniPoolsV3 || sourceAction == Actions.AddLiquidityV3) ? (
+                <>
+                  <div>
+                    <UniV3Pools
+                      currentLiquidityPair={currentLiquidityPair}
+                      parentState={this.state}
+                      selectCurrency={this.selectCurrency}
+                      flipCurrency={this.flipCurrency}
+                      userDeadline={userDeadline}
+                      slippage={slippage}
+                      intl={intl}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div styleName={`${wrongNetwork ? 'disabled' : ''}`}>
+                    <InputForm
+                      parentState={this.state}
+                      stateReference={linked}
+                      selectCurrency={this.selectCurrency}
+                      flipCurrency={this.flipCurrency}
+                      openExternalExchange={this.openExternalExchange}
+                      onInputDataChange={this.onInputDataChange}
+                      setSpendedAmount={this.setSpendedAmount}
+                      updateWallets={this.updateWallets}
+                      insufficientBalanceA={insufficientBalanceA}
+                      insufficientBalanceB={insufficientBalanceB}
+                      resetReceivedAmount={this.resetReceivedAmount}
+                      setReceivedAmount={this.setReceivedAmount}
+                      switchUniV3SourcePool={this.switchUniV3SourcePool}
+                    />
+                  </div>
+                </>
+              )}
+              
               <UserInfo
                 history={history}
                 isSourceMode={isSourceMode}
@@ -1215,41 +1376,52 @@ class QuickSwap extends PureComponent<IUniversalObj, ComponentState> {
                 toWallet={toWallet}
                 fiat={fiat}
                 serviceFee={serviceFee}
+                useUniSwapV3={useUniSwapV3}
+                setUseUniSwapV3={this.setUseUniSwapV3.bind(this)}
               />
+              {!(sourceAction == Actions.UniPoolsV3 || sourceAction == Actions.AddLiquidityV3) && (
+                <>
+                  <Feedback
+                    network={network}
+                    isSourceMode={isSourceMode}
+                    wrongNetwork={wrongNetwork}
+                    insufficientBalanceA={insufficientBalanceA}
+                    insufficientBalanceB={insufficientBalanceB}
+                    blockReason={blockReason}
+                    baseChainWallet={baseChainWallet}
+                    spendedAmount={spendedAmount}
+                    needApproveA={needApproveA}
+                    needApproveB={needApproveB}
+                    spendedCurrency={spendedCurrency}
+                    receivedCurrency={receivedCurrency}
+                    sourceAction={sourceAction}
+                    isWrapUnwrap={isWrapUnwrap}
+                  />
 
-              <Feedback
-                network={network}
-                isSourceMode={isSourceMode}
-                wrongNetwork={wrongNetwork}
-                insufficientBalanceA={insufficientBalanceA}
-                insufficientBalanceB={insufficientBalanceB}
-                blockReason={blockReason}
-                baseChainWallet={baseChainWallet}
-                spendedAmount={spendedAmount}
-                needApproveA={needApproveA}
-                needApproveB={needApproveB}
-                spendedCurrency={spendedCurrency}
-                receivedCurrency={receivedCurrency}
-                sourceAction={sourceAction}
-              />
-
-              <Footer
-                history={history}
-                parentState={this.state}
-                isSourceMode={isSourceMode}
-                sourceAction={sourceAction}
-                reportError={this.reportError}
-                setBlockReason={this.setBlockReason}
-                resetSwapData={this.resetSwapData}
-                resetSpendedAmount={this.resetSpendedAmount}
-                isApiRequestBlocking={this.isApiRequestBlocking}
-                insufficientBalanceA={insufficientBalanceA}
-                insufficientBalanceB={insufficientBalanceB}
-                setPending={this.setPending}
-                onInputDataChange={this.onInputDataChange}
-                finalizeApiSwapData={this.finalizeApiSwapData}
-                baseChainWallet={baseChainWallet}
-              />
+                  <Footer
+                    history={history}
+                    parentState={this.state}
+                    isSourceMode={isSourceMode}
+                    sourceAction={sourceAction}
+                    reportError={this.reportError}
+                    setBlockReason={this.setBlockReason}
+                    resetSwapData={this.resetSwapData}
+                    resetSpendedAmount={this.resetSpendedAmount}
+                    isApiRequestBlocking={this.isApiRequestBlocking}
+                    insufficientBalanceA={insufficientBalanceA}
+                    insufficientBalanceB={insufficientBalanceB}
+                    setPending={this.setPending}
+                    onInputDataChange={this.onInputDataChange}
+                    finalizeApiSwapData={this.finalizeApiSwapData}
+                    baseChainWallet={baseChainWallet}
+                    useUniSwapV3={useUniSwapV3}
+                    hasUniSwapV3={hasUniSwapV3}
+                    isWrapUnwrap={isWrapUnwrap}
+                    isWrappedTokenA={isWrappedTokenA}
+                    isWrappedTokenB={isWrappedTokenB}
+                  />
+                </>
+              )}
             </>
           )}
         </section>

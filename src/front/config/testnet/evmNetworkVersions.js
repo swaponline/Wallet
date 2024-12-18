@@ -1,5 +1,5 @@
 export default [
-    4,      // ETH Testnet (Rinkeby)
+    11155111,      // ETH Testnet (Sepolia)
     97,     // BSC Testnet
     80001,  // MATIC Testnet
     421611, // ARBITRUM Testnet (Rinkeby)

@@ -467,7 +467,7 @@ const externalConfig = () => {
       })
     }
   }
-
+  window.appConfig = config
   return config
 }
 

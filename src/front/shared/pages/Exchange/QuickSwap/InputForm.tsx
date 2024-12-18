@@ -41,6 +41,7 @@ type InputFormProps = {
   setReceivedAmount: (v: string) => void
   insufficientBalanceA: boolean
   insufficientBalanceB: boolean
+  switchUniV3SourcePool: (fee: number, address: string) => void
 }
 
 function InputForm(props: InputFormProps) {
@@ -59,6 +60,7 @@ function InputForm(props: InputFormProps) {
     setReceivedAmount,
     insufficientBalanceA,
     insufficientBalanceB,
+    switchUniV3SourcePool,
   } = props
 
   const {
@@ -75,6 +77,9 @@ function InputForm(props: InputFormProps) {
     fromWallet,
     toWallet,
     isPending,
+    useUniSwapV3,
+    uniV3PoolsByFee,
+    uniV3ActivePoolFee,
   } = parentState
 
   const [fromBalancePending, setFromBalancePending] = useState(false)
@@ -231,6 +236,30 @@ function InputForm(props: InputFormProps) {
   const showFiatExchangeBtn = window.transakApiKey
     || supportedCurrencies.includes(spendedCurrency.value)
 
+  const renderUniV3PoolsByFee = () => {
+    return (
+      <div styleName="univ3SwitchPoolFee">
+        <strong>
+          <FormattedMessage
+            id="qe_UNIV3_PoolsByFee"
+            defaultMessage="Pool fee:"
+          />
+        </strong>
+        {uniV3PoolsByFee.map(({ fee, address }) => {
+          return (
+            <a styleName={(fee == uniV3ActivePoolFee) ? 'active' : ''}
+              key={fee}
+              onClick={() => {
+                switchUniV3SourcePool(fee, address)
+              }}
+            >
+              {(fee / 10000)}%
+            </a>
+          )
+        })}
+      </div>
+    )
+  }
   return (
     <form action="">
       <QuickSwapFormTour isTourOpen={isTourOpen} closeTour={closeTour} />
@@ -323,6 +352,9 @@ function InputForm(props: InputFormProps) {
             })
           }}
         />
+        {useUniSwapV3 && uniV3PoolsByFee.length > 0 && (
+          <>{renderUniV3PoolsByFee()}</>
+        )}
       </div>
       {receivedCurrency.notExist && (
         <div styleName="addCustomTokenBtn">

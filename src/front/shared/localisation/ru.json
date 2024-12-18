@@ -5522,6 +5522,7 @@
     "message": "Обменять",
     "files": [
       "src/front/shared/pages/Exchange/QuickSwap/Footer.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/ReviewSwapModal.tsx",
       "src/front/shared/pages/Exchange/QuickSwap/SourceActions.tsx"
     ]
   },
@@ -6230,6 +6231,546 @@
     "message": "Адрес вашего токена {tokenSymbol} на блокчейне {tokenBlockchain}",
     "files": [
       "src/front/shared/components/modals/ReceiveModal/ReceiveModal.tsx"
+    ]
+  },
+  {
+    "id": "quickswap_unwrap_token",
+    "message": "Unwrap coin",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/Footer.tsx"
+    ]
+  },
+  {
+    "id": "quickswap_wrap_token",
+    "message": "Wrap coin",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/Footer.tsx"
+    ]
+  },
+  {
+    "id": "reviewSwap",
+    "message": "Review swap",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/Footer.tsx"
+    ]
+  },
+  {
+    "id": "qe_UNIV3_PoolsByFee",
+    "message": "Pool fee:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/InputForm.tsx"
+    ]
+  },
+  {
+    "id": "previewSwap",
+    "message": "Preview swap",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/ReviewSwapModal.tsx"
+    ]
+  },
+  {
+    "id": "waitUntilSwapComplete",
+    "message": "Please wait until the swap is complete",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/ReviewSwapModal.tsx"
+    ]
+  },
+  {
+    "id": "qs_uniPoolsV3",
+    "message": "Liquidity pools",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/SourceActions.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_cancel",
+    "message": "Cancel",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_liq_add_do_approve",
+    "message": "Approve {symbol}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_liq_add_fetching",
+    "message": "Fetching...",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_liq_add_is_approving",
+    "message": "Approving {symbol}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_liq_add_nocoins",
+    "message": "Insufficient {symbol} balance",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add_confirm",
+    "message": "Add liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add_header",
+    "message": "Add more liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add_message",
+    "message": "Add liquidity?",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add_processing",
+    "message": "Adding liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add_title",
+    "message": "Confirm action",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_added",
+    "message": "Liquidity successfully added",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_return_to_pos_list",
+    "message": "Return back to positions list",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/AddLiquidity.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/PositionInfo.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_price_per_token",
+    "message": "{price} {tokenA} per {tokenB}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/helpers.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_add",
+    "message": "Increase liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/PositionInfo.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del",
+    "message": "Remove liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/PositionInfo.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_amount",
+    "message": "Amount",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_confirm",
+    "message": "Remove liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_header",
+    "message": "Remove liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_message",
+    "message": "Do you really want to remove {percents}% of liquidity ({token0Amount} {token0Symbol} and {token1Amount} {token1Symbol})?",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_removing",
+    "message": "Liquidity removal...",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_title",
+    "message": "Confirm action",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_token_symbol",
+    "message": "Pooled {symbol}:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_del_unwrap",
+    "message": "Collect as {tokenSymbol}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_liq_deleted",
+    "message": "Liquidity successfully removed",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/RemoveLiquidity.tsx"
+    ]
+  },
+  {
+    "id": "Control_AmountInput_Balance",
+    "message": "Balance:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/AmountInput.tsx"
+    ]
+  },
+  {
+    "id": "PriceInput_amount_per_one",
+    "message": "{tokenA} per {tokenB}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/PriceInput.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_minted",
+    "message": "New pool position successfull created",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_deposit_amounts",
+    "message": "Deposit amounts",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_high_price",
+    "message": "High {symbol} price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_lower_price",
+    "message": "Low {symbol} price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_need_init_pool",
+    "message": "This pool must be initialized before you can add liquidity. To initialize, select a starting price for the pool. Then, enter your liquidity price range and deposit amount. Gas fees will be higher than usual due to the initialization transaction.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_new_pos_title",
+    "message": "Creating new liquidity position",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_out_of_price",
+    "message": "Your position will not earn fees or be used in trades until the market price moves into your range.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_pool_created",
+    "message": "Created",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_pool_notcreated",
+    "message": "Not created",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_preview",
+    "message": "Create new position",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_preview_confirm",
+    "message": "Confirm",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_preview_message",
+    "message": "Create new pool position? Estimate gas {gas} {baseCurrency}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_preview_title",
+    "message": "Creating new pool position",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_privew_price_range",
+    "message": "Your teir fee {fee}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_select_your_fee",
+    "message": "Select you fee",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_set_price_range",
+    "message": "Set price range",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "uni_mint_start_price",
+    "message": "Starting {symbol} price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "univ3_fee_desc_100",
+    "message": "Best for very stable pairs.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "univ3_fee_desc_10000",
+    "message": "Best for exotic pairs.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "univ3_fee_desc_3000",
+    "message": "Best for most pairs.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "univ3_fee_desc_500",
+    "message": "Best for stable pairs.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/MintPosition.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_current_price",
+    "message": "Current price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_max_price",
+    "message": "Max price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_min_price",
+    "message": "Min price",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_per_token",
+    "message": "{tokenA} per {tokenB}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_posinfo_liqudity_title",
+    "message": "Liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_position_closed",
+    "message": "closed",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_position_fee",
+    "message": "Fee: {fee}%",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_position_inrange",
+    "message": "in range",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_position_outrange",
+    "message": "out of range",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx",
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "univ3_pos_info_price_range",
+    "message": "Price range",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/univ3/ui/InfoBlock.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_addPosition",
+    "message": "Create New Position",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_manage_position",
+    "message": "Manage position",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_mintPosition",
+    "message": "Add Liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pool_liquidity",
+    "message": "Liquidity",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pool_pricerange",
+    "message": "Price range",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pools_currentPrice",
+    "message": "Current price:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_list_hide_closed",
+    "message": "Hide closed positions",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_pos_list_show_closed",
+    "message": "Show closed positions {closedPosCount}",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_price_max",
+    "message": "Max:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_price_min",
+    "message": "Min:",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_user_donthave_pool",
+    "message": "This pair dont have liquidity - create it",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
+    ]
+  },
+  {
+    "id": "qs_uni_user_donthave_positions",
+    "message": "You are dont have active pool liquidity positions.",
+    "files": [
+      "src/front/shared/pages/Exchange/QuickSwap/UniV3Pools.tsx"
     ]
   }
 ]

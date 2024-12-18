@@ -1,0 +1,190 @@
+H4 {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12pt;
+  color: var(--gray-dark);
+}
+.selectFee {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 0.9rem;
+  
+  >DIV {
+    width: 25%;
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-right: 0px;
+    
+    >SPAN {
+      display: block;
+      text-align: left;
+    }
+    &.active {
+      background: var(--color-inactive-border);
+    }
+    >EM {
+      display: block;
+      font-weight: bold;
+      font-style: normal;
+      color: var(--color-brand);
+    }
+    &.notCreated>EM {
+      color: var(--color-f-error);
+    }
+  }
+  >DIV:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+  >DIV:last-child {
+    border-radius: 0px 6px 6px 0px;
+    border: 1px solid var(--color-border);
+  }
+  
+  LABEL {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    justify-content: space-between;
+    
+    SPAN {
+      font-weight: bold;
+    }
+    input {
+      display: grid;
+      place-content: center;
+      margin: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      border: 0.15em solid var(--color-brand);
+      color: currentColor;
+      /* For iOS < 15 to remove gradient background */
+      background-color: var(--color-background-elements);
+
+      &::before {
+        content: '';
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: inherit;
+        transform: scale(0);
+        transition: 100ms transform ease-in-out;
+        background-color: var(--color-brand);
+      }
+
+      &:checked::before {
+        transform: scale(1);
+      }
+
+      &:focus {
+        outline: max(2px, 0.1em) solid var(--color-brand);
+        outline-offset: max(2px, 0.1em);
+      }
+      
+      &[disabled] {
+        border-color: var(--gray);
+      }
+      &[disabled]::before {
+        background-color: var(--gray);
+      }
+    }
+  }
+}
+.notInRange,
+.needInitPool {
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-f-error);
+  padding: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: var(--color-warning);
+  border-radius: 6px;
+  color: var(--color-f-error);
+  
+  SPAN {
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    font-size: 10pt;
+  }
+  I {
+    display: block;
+    margin-right: 0.5rem;
+    margin-top: 2px;
+  }
+}
+.needInitPool {
+  background: var(--color-brand-background);
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+}
+@media all and (max-width: 720px) {
+  .selectFee {
+    display: block;
+    justify-content: space-between;
+
+    font-size: 0.9rem;
+    
+    >DIV {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      border-bottom: 0px;
+    }
+    >DIV:first-child {
+      border-radius: 6px 6px 0 0;
+    }
+    >DIV:last-child {
+      border-radius: 0px 0px 6px 6px;
+      border: 1px solid var(--color-border);
+    }
+  }
+}
+
+H3.title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.viewSideHolder {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: baseline;
+  >STRONG {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    font-size: 12pt;
+    color: var(--gray-dark);
+  }
+}
+.selectViewSide {
+  display: flex;
+  font-size: 0.9rem;
+  justify-content: flex-end;
+  >A {
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--color-border);
+  }
+  >A:first-child {
+    border-radius: 4px 0 0 4px;
+    border-right: 0;
+  }
+  >A:last-child {
+    border-radius: 0px 4px 4px 0px;
+  }
+  >A.active {
+    cursor: default;
+    background-color: var(--color-inactive-border);
+    border-color: var(--color-inactive-border);
+  }
+}

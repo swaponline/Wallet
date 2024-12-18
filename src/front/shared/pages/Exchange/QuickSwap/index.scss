@@ -66,6 +66,45 @@ $maxWidth: 38em;
   }
 }
 
+.univ3SwitchPoolFee {
+  display: flex;
+  color: var(--color-indicating);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  padding: 4px;
+  padding-left: 10px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: -16px;
+  margin-bottom: 10px;
+  text-align: left;
+  position: relative;
+  > STRONG {
+    padding-right: 1em;
+  }
+  > A {
+    padding-left: 0.5em;
+  }
+  > A::after {
+    display: inline-block;
+    content: "|";
+    padding-left: 0.5em;
+    color: var(--color-indicating);
+  }
+  > A:last-child::after {
+    display: none;
+  }
+  > A:hover {
+    text-decoration: underline;
+    color: var(--color-brand-hover);
+    cursor: pointer;
+  }
+  > A.active {
+    color: var(--color-brand);
+    font-weight: bold;
+  }
+}
 .formCenter {
   padding-bottom: 1.2rem;
   position: relative;

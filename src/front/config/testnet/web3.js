@@ -1,5 +1,5 @@
 export default {
-  provider: 'https://goerli.infura.io/v3/{INFURA_API_KEY}',
+  provider: 'https://sepolia.infura.io/v3/{INFURA_API_KEY}',
   binance_provider: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
   matic_provider: 'https://polygon-testnet.public.blastapi.io',
   arbitrum_provider: 'https://rinkeby.arbitrum.io/rpc',

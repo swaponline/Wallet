@@ -4,9 +4,9 @@ import link from './link'
 export default {
   ETH: {
     currency: 'ETH',
-    chainId: '0x4',
-    networkVersion: 4,
-    chainName: 'Rinkeby Test Network',
+    chainId: '0xAA36A7',
+    networkVersion: 11155111,
+    chainName: 'Sepolia Test Network',
     rpcUrls: [web3.provider],
     blockExplorerUrls: [link.etherscan]
   },

@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 import InputDataDecoder from 'ethereum-input-data-decoder'
 import TokenAbi from 'human-standard-token-abi'
+import WrappedCoinAbi from 'common/wrappedcoin/abi.json'
 import { BigNumber } from 'bignumber.js'
 import { getState } from 'redux/core'
 import actions from 'redux/actions'
@@ -16,7 +17,7 @@ import metamask from 'helpers/metamask'
 import getCoinInfo from 'common/coins/getCoinInfo'
 
 const NETWORK = process.env.MAINNET ? 'mainnet' : 'testnet'
-const Decoder = new InputDataDecoder(TokenAbi)
+const Decoder = new InputDataDecoder([...TokenAbi,...WrappedCoinAbi])
 
 
 class Erc20LikeAction {
@@ -342,9 +343,16 @@ class Erc20LikeAction {
 
           const txData = Decoder.decodeData(tx.input)
 
+          // Transfer
           if (txData && txData.inputs?.length === 2 && txData.method === `transfer`) {
             receiverAddress = `0x${txData.inputs[0]}`
             amount = new BigNumber(txData.inputs[1])
+              .div(new BigNumber(10).pow(tokenDecimal))
+              .toNumber()
+          }
+          // Wrapped coin - unwrap
+          if (txData && txData.inputs?.length === 1 && txData.method === `withdraw`) {
+            amount = new BigNumber(txData.inputs[0])
               .div(new BigNumber(10).pow(tokenDecimal))
               .toNumber()
           }

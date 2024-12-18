@@ -1,0 +1,20 @@
+.backButton {
+  text-align: left;
+  
+  >A {
+    display: block;
+    cursor: pointer;
+    vertical-align: middle;
+    >I {
+      font-size: 16pt;
+      padding-right: 10px;
+    }
+    >SPAN {
+      font-size: 16pt;
+      font-weight: bold;
+    }
+    &:hover {
+      color: var(--color-brand);
+    }
+  }
+}

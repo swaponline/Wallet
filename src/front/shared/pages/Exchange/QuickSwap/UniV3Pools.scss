@@ -1,0 +1,220 @@
+
+.currencyHolder {
+  display: flex;
+  justify-content: space-between;
+  height: 72px;
+  > div {
+    width: 100%;
+    position: relative;
+  }
+  > .arrows {
+    display: block;
+    width: auto;
+    text-align: center;
+    > button {
+      display: inline-block;
+      padding-top: 16px;
+    }
+  }
+}
+.currencySelect {
+  width: 100%;
+  border-radius: 0 !important;
+  border: 1px solid var(--color-border) !important;
+  background: none !important;
+  box-shadow: none !important;
+  position: absolute !important;
+  left: 0px;
+  top: 0px;
+  text-transform: capitalize;
+  @include ff-bold;
+
+  > div:nth-child(2) {
+    margin-top: 10px;
+    display: block;
+    position: absolute;
+    top: 75px;
+    border: none;
+    width: auto;
+    z-index: 1111112;
+    border-radius: 0;
+    box-shadow: none;
+    div {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      border: none;
+    }
+  }
+  input {
+    border: none;
+    height: 69px;
+    border-bottom: 1px solid var(--color);
+    font-size: 16px;
+    padding-left: 2px;
+  }
+}
+
+.currencySelect.dropDown {
+  width: 100%;
+  border: 1px solid var(--color);
+  top: 0px;
+  z-index: 1;
+  background: var(--color-background-elements);
+  height: 375px;
+  border-radius: 3px;
+}
+
+
+
+.currentPriceHolder {
+  display: block;
+  color: var(--color-indicating);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  padding: 4px;
+  text-align: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.poolPosition {
+  display: block;
+  margin: 0 0 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-indicating);
+  background-color: var(--color-inactive-border);
+  
+  .poolPositionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem;
+    margin: -0.4rem -0.6rem;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0.4rem 0.4rem 0 0;
+    > DIV {
+      display: flex;
+    }
+    > DIV > STRONG {
+      padding-right: 0.5em;
+      color: var(--color-brand);
+    }
+    > DIV > DIV {
+      color: var(--color);
+    }
+    > EM {
+      display: block;
+      color: var(--color-success);
+      font-style: normal;
+      font-weight: bold;
+      
+      > I {
+        padding-right: 4px;
+      }
+      &.outOfRange {
+        color: var(--color-bad);
+      }
+      &.closed {
+        color: var(--color-indicating);
+      }
+    }
+  }
+  .poolControl {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--color-border);
+    margin-left: -0.6rem;
+    margin-right: -0.6rem;
+    padding: 0.6rem;
+    padding-bottom: 0;
+    
+    > A {
+      font-weight: bold;
+      color: var(--color-link);
+      cursor: pointer;
+      vertical-align: middle;
+      >I {
+        margin-right: 5px;
+      }
+      &:hover {
+        color: var(--color-link-hover);
+        text-decoration: underline;
+      }
+    }
+  }
+  .poolPositionInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 0.6rem;
+    
+    .liquidity {
+      text-align:left;
+      width: 50%;
+      border-right: 1px solid var(--color-border);
+      > STRONG {
+        display: block;
+        border-bottom: 1px solid var(--color-border);
+        margin-right: 1rem;
+        margin-top: 0.4rem;
+      }
+      > DIV {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.4REM;
+        margin-right: 1rem;
+      }
+    }
+    .prices {
+      text-align: right;
+      > STRONG {
+        display: block;
+        border-bottom: 1px solid var(--color-border);
+        margin-left: 1rem;
+        margin-top: 0.4rem;
+      }
+      > DIV {
+        display: block;
+        padding: 0.4rem;
+      }
+    }
+  }
+}
+
+
+.closedShowToggle {
+  display: block;
+  color: var(--color-brand) !important;
+  font-weight: bold;
+  padding: 0.2rem;
+  text-align: right;
+  cursor: pointer;
+  
+  &:hover {
+    color: var(--color-brand-hover) !important;
+    text-decoration: underline !important;
+  }
+  
+}
+
+.noActivePool,
+.noActivePositions {
+  display: block;
+  padding: 1em;
+  font-weight: bold;
+  color: var(--color-f-error);
+}
+
+@include media-mobile {
+  .currencySelect {
+    height: 48px;
+    input {
+      font-size: 13px;
+    }
+  }
+}

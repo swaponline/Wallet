@@ -1,0 +1,13 @@
+.buttonsHolder {
+  display: flex;
+  margin-bottom: 1rem;
+
+  >DIV:first-child {
+    margin-right: 0.5rem;
+    width: calc(50% - 0.5rem);
+  }
+  >DIV:last-child {
+    margin-left: 0.5rem;
+    width: calc(50% - 0.5rem);
+  }
+}

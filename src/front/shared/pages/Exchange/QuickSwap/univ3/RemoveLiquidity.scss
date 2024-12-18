@@ -1,0 +1,87 @@
+.header {
+  font-weight: bold;
+  margin-bottom: 1rem
+}
+.percentRange {
+  display: block;
+  padding: 0.5rem;
+  background-color: var(--color-inactive-border);
+  border: 1px solid var(--color-inactive-border);
+  border-radius: 6px;
+  
+  >STRONG {
+    display: block;
+    text-align: left;
+    color: var(--color-indicating);
+  }
+  .predefinedPercents {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    >SPAN {
+      display: block;
+      font-weight: bold;
+      font-size: 30pt;
+    }
+    >DIV {
+      display: flex;
+      
+      >A {
+        display: block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+        margin-left: 0.3rem;
+        background-color: var(--color-brand);
+        color: #fff;
+        cursor: pointer;
+        &:hover {
+          background-color: var(--color-brand-hover);
+        }
+      }
+      &.disabled {
+        >A {
+          background-color: var(--color-border);
+          cursor: default;
+        }
+      }
+    }
+  }
+  .inputHolder {
+    display: block;
+    >INPUT {
+      display: block;
+      width: 100%;
+    }
+  }
+}
+.pooledCount {
+  display: block;
+  padding: 0.5rem;
+  background-color: var(--color-inactive-border);
+  border: 1px solid var(--color-inactive-border);
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  
+  >DIV {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    >SPAN {
+      font-weight: bold;
+      color: var(--color-indicating);
+    }
+    
+    &.wrapNative {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.cancelHolder {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+

@@ -12,6 +12,10 @@ import externalConfig from 'helpers/externalConfig'
 import metamask from 'helpers/metamask'
 import { feedback, constants, cacheStorageGet, cacheStorageSet, apiLooper } from 'helpers'
 
+// get to contracts txs info
+import InputDataDecoder from 'ethereum-input-data-decoder'
+import WrappedCoinAbi from 'common/wrappedcoin/abi.json'
+
 // use an ethereum private key for EVM compatible blockchains
 const EVM_PRIVATE_KEY = 'eth'
 
@@ -121,17 +125,25 @@ class EthLikeAction {
       Web3.eth.getTransaction(hash)
         .then((tx) => {
           if (!tx) return res(null)
+          const { from, to, value, gas, gasPrice, blockHash, input } = tx
 
-          const { from, to, value, gas, gasPrice, blockHash } = tx
-
-          const amount = Web3.utils.fromWei(value)
+          let amount = Web3.utils.fromWei(value)
           const minerFee = new BigNumber(Web3.utils.toBN(gas).toNumber())
             .multipliedBy(Web3.utils.toBN(gasPrice).toNumber())
             .dividedBy(1e18)
             .toNumber()
 
           let adminFee: number | false = false
-
+          
+          if ( input !== "0x" ) {
+            // with contract interact
+            // check wrapped coin
+            let txData:any = false
+            txData = new InputDataDecoder(WrappedCoinAbi).decodeData(tx.input)
+            if (txData && txData.inputs?.length === 1 && txData.method === `withdraw`) {
+              amount =  Web3.utils.fromWei(txData.inputs[0])
+            }
+          }
           if (this.adminFeeObj && to !== this.adminFeeObj.address) {
             const feeFromUsersAmount = new BigNumber(this.adminFeeObj.fee)
               .dividedBy(100)
@@ -390,8 +402,17 @@ class EthLikeAction {
     || (typeof limit === 'string' && limit.match(/^0x[0-9a-f]+$/i))
   )
 
-  send = async (params): Promise<{ transactionHash: string } | Error> => {
-    const { to, amount = 0, gasLimit: customGasLimit, speed, data, waitReceipt = false } = params
+  send = async (params): Promise<{ transactionHash: string } | number | Error> => {
+    const {
+      to,
+      amount = 0,
+      amountInWei = false,
+      gasLimit: customGasLimit,
+      speed,
+      data,
+      waitReceipt = false,
+      estimateGas = false,
+    } = params
     let { gasPrice } = params
 
     const Web3 = this.getCurrentWeb3()
@@ -411,7 +432,7 @@ class EthLikeAction {
       from: Web3.utils.toChecksumAddress(ownerAddress),
       to: to.trim(),
       gasPrice,
-      value: Web3.utils.toHex(Web3.utils.toWei(String(amount), 'ether')),
+      value: (amountInWei) ? amount : Web3.utils.toHex(Web3.utils.toWei(String(amount), 'ether')),
     }
 
     if (customGasLimit) {
@@ -428,6 +449,10 @@ class EthLikeAction {
       } else {
         txData.gas = defaultGasLimit
       }
+    }
+
+    if (estimateGas) {
+      return new BigNumber(txData.gas).multipliedBy(txData.gasPrice).toNumber()
     }
 
     const privateKey = this.getPrivateKeyByAddress(ownerAddress)

@@ -17,6 +17,7 @@ import {
 import Button from 'components/controls/Button/Button'
 import ReviewSwapModal from './ReviewSwapModal'
 
+
 type FooterProps = {
   history: any
   parentState: ComponentState
@@ -33,6 +34,13 @@ type FooterProps = {
   onInputDataChange: VoidFunction
   finalizeApiSwapData: () => Promise<void>
   baseChainWallet: IUniversalObj
+
+  hasUniSwapV3: boolean
+  useUniSwapV3: boolean
+
+  isWrapUnwrap: boolean
+  isWrappedTokenA: boolean
+  isWrappedTokenB: boolean
 }
 
 function Footer(props: FooterProps) {
@@ -52,7 +60,14 @@ function Footer(props: FooterProps) {
     baseChainWallet,
     onInputDataChange,
     finalizeApiSwapData,
+    useUniSwapV3,
+    hasUniSwapV3,
+    
+    isWrapUnwrap,
+    isWrappedTokenA,
+    isWrappedTokenB,
   } = props
+
   const {
     blockReason,
     network,
@@ -75,6 +90,7 @@ function Footer(props: FooterProps) {
     swapFee,
     serviceFee,
     fiat,
+    uniV3ActivePoolFee,
   } = parentState
 
   const [finalizeSwap, setFinalizeSwap] = useState<boolean>(false)
@@ -85,10 +101,14 @@ function Footer(props: FooterProps) {
   }
 
   const approve = async (direction) => {
-    const spender: `0x${number}` = isSourceMode
+    let spender: `0x${number}` = isSourceMode
       ? LIQUIDITY_SOURCE_DATA[network.networkVersion]?.router
       : externalConfig.swapContract[SWAP_API[network.networkVersion].spender]
 
+    if (useUniSwapV3 && hasUniSwapV3) {
+      spender = externalConfig?.UNISWAP_V3_CONTRACTS[network.networkVersion]?.router
+    }
+    
     let wallet = fromWallet
     let amount = spendedAmount
 
@@ -155,6 +175,36 @@ function Footer(props: FooterProps) {
     setFinalizeSwap(false)
   }
 
+  const handleWrap = async () => {
+    setPending(true)
+
+    const baseCurrency = fromWallet.standard ? fromWallet.baseCurrency : fromWallet.currency
+    const result = await actions.uniswap.nativeCoinWrapper({
+      baseCurrency,
+      chainId: network.networkVersion,
+      amount: spendedAmount,
+      waitReceipt: true,
+      isWrap: (isWrappedTokenB) ? true : false,
+    })
+    
+    setPending(false)
+
+    if (result instanceof Error) {
+      if (result?.message?.match(/INSUFFICIENT_OUTPUT_AMOUNT/)) {
+        setBlockReason(BlockReasons.InsufficientSlippage)
+      } else {
+        reportError(result)
+      }
+    } else if (result?.transactionHash) {
+      const txInfoUrl = transactions.getTxRouter(
+        fromWallet.standard ? fromWallet.tokenKey : fromWallet.currency,
+        result.transactionHash
+      )
+
+      routing.redirectTo(txInfoUrl)
+    }
+  }
+
   const directSwap = async () => {
     if (sourceAction !== Actions.Swap || !isSourceMode) return
 
@@ -167,21 +217,46 @@ function Footer(props: FooterProps) {
     )
     setPending(true)
 
+
     try {
-      const result = await actions.uniswap.swapCallback({
-        slippage,
-        routerAddress: LIQUIDITY_SOURCE_DATA[network.networkVersion]?.router,
-        baseCurrency,
-        owner: fromWallet.address,
-        fromToken: fromWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
-        sellAmount: spendedAmount,
-        fromTokenDecimals: fromWallet.decimals ?? COIN_DECIMALS,
-        toToken: toWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
-        buyAmount: receivedAmount,
-        toTokenDecimals: toWallet.decimals ?? COIN_DECIMALS,
-        deadlinePeriod: userDeadline * SEC_PER_MINUTE,
-        useFeeOnTransfer: true,
-      })
+      let result: any = false
+
+      if (hasUniSwapV3 && useUniSwapV3) {
+        result = await actions.uniswap.swapCallbackV3({
+          slippage,
+          baseCurrency,
+          chainId: network.networkVersion,
+          owner: fromWallet.address,
+          fromToken: fromWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
+          sellAmount: spendedAmount,
+          fromTokenDecimals: fromWallet.decimals ?? COIN_DECIMALS,
+          toToken: toWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
+          buyAmount: receivedAmount,
+          toTokenDecimals: toWallet.decimals ?? COIN_DECIMALS,
+          deadlinePeriod: userDeadline * SEC_PER_MINUTE,
+          useFeeOnTransfer: true,
+          isNative: !(fromWallet.isToken && toWallet.isToken),
+          fromNative: !fromWallet.isToken,
+          toNative: !toWallet.isToken,
+          fee: uniV3ActivePoolFee,
+        })
+        
+      } else {
+        result = await actions.uniswap.swapCallback({
+          slippage,
+          routerAddress: LIQUIDITY_SOURCE_DATA[network.networkVersion]?.router,
+          baseCurrency,
+          owner: fromWallet.address,
+          fromToken: fromWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
+          sellAmount: spendedAmount,
+          fromTokenDecimals: fromWallet.decimals ?? COIN_DECIMALS,
+          toToken: toWallet.contractAddress ?? ADDRESSES.EVM_COIN_ADDRESS,
+          buyAmount: receivedAmount,
+          toTokenDecimals: toWallet.decimals ?? COIN_DECIMALS,
+          deadlinePeriod: userDeadline * SEC_PER_MINUTE,
+          useFeeOnTransfer: true,
+        })
+      }
 
       setPending(false)
 
@@ -271,7 +346,7 @@ function Footer(props: FooterProps) {
   const apiSwapIsAvailable = swapData && !doNotMakeApiRequest && !commonBlockReasons && formFilled
 
   const directSwapIsAvailable =
-    !commonBlockReasons && !needApproveA && !insufficientBalanceA && formFilled
+    !commonBlockReasons && (!needApproveA || isWrapUnwrap) && !insufficientBalanceA && formFilled
 
   const addLiquidityIsAvailable =
     !commonBlockReasons && !needApproveA && !needApproveB && !insufficientBalanceB && formFilled
@@ -296,7 +371,7 @@ function Footer(props: FooterProps) {
           toWallet={toWallet}
         />
       )}
-      {needApproveA ? (
+      {needApproveA && !isWrapUnwrap ? (
         <Button
           pending={isPending}
           disabled={!approveAIsAvailable || approvingDoesNotMakeSense}
@@ -310,7 +385,7 @@ function Footer(props: FooterProps) {
             values={{ token: spendedCurrency.name }}
           />
         </Button>
-      ) : needApproveB && approveBIsNecessary ? (
+      ) : needApproveB && approveBIsNecessary && !isWrapUnwrap ? (
         <Button
           pending={isPending}
           disabled={!approveBIsAvailable || approvingDoesNotMakeSense}
@@ -329,9 +404,25 @@ function Footer(props: FooterProps) {
           <FormattedMessage id="reviewSwap" defaultMessage="Review swap" />
         </Button>
       ) : sourceAction === Actions.Swap ? (
-        <Button pending={isPending} disabled={!directSwapIsAvailable} onClick={directSwap} brand>
-          <FormattedMessage id="swap" defaultMessage="Swap" />
-        </Button>
+        <>
+          {isWrapUnwrap ? (
+            <Button
+              pending={isPending}
+              disabled={!directSwapIsAvailable}
+              onClick={handleWrap}
+              brand
+            >
+              {isWrappedTokenA
+                ? (<FormattedMessage id="quickswap_unwrap_token" defaultMessage="Unwrap coin" />)
+                : (<FormattedMessage id="quickswap_wrap_token" defaultMessage="Wrap coin" />)
+              }
+            </Button>
+          ) : (
+            <Button pending={isPending} disabled={!directSwapIsAvailable} onClick={directSwap} brand>
+              <FormattedMessage id="swap" defaultMessage="Swap" />
+            </Button>
+          )}
+        </>
       ) : sourceAction === Actions.AddLiquidity ? (
         <Button
           pending={isPending}

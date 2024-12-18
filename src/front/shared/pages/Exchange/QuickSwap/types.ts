@@ -48,6 +48,8 @@ export enum Sections {
 export enum Actions {
   Swap,
   AddLiquidity,
+  UniPoolsV3,
+  AddLiquidityV3,
 }
 
 export enum Direction {
@@ -98,4 +100,14 @@ export type ComponentState = SwapInfo & {
   blockReason: BlockReasons | undefined
   liquidityErrorMessage: string
   zeroxApiKey: string
+  
+  useUniSwapV3: boolean
+  uniV3PoolsByFee: any[]
+  uniV3ActivePoolFee: number
+  // Wrap/Unwrap
+  isWrapUnwrap: boolean
+  isWrappedTokenA: boolean
+  isWrappedTokenB: boolean
+  isNativeTokenA: boolean
+  isNativeTokenB: boolean
 }
